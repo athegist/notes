@@ -1,7 +1,11 @@
 # SelectMyParent: A PowerShell port of Didier Stevens' SelectMyParent
 
 function CurrentProcessAdjustToken {
-
+    # Declare function variables
+    # Handle htoken
+    [IntPtr]$htoken = [IntPtr]::Zero
+    # Open the process to adjust privs, return the process handle
+    $adjPriv::OpenProcessToken($adjPriv::GetCurrentProcess(), [AdjPriv.AdjPriv]::TOKEN_ADJUST_PRIVILEGES, [ref]$htoken) 
 }
 
 # Main
@@ -24,5 +28,8 @@ $signature = @"
 
 Add-Type -MemberDefinition $signature -Name AdjPriv -Namespace AdjPriv
 
+
+
 $adjpriv = [AdjPriv.AdjPriv]
+
 
