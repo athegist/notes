@@ -196,9 +196,10 @@ $signature = @"
         Break 
     } 
 
+    # Below bits are for reference, not part of Invoke-CommandWithParent.ps1
     $process = (Get-Process -Name lsass) 
     [IntPtr]$hlsasstoken = [IntPtr]::Zero 
-    $retVal = $pickPPId::OpenProcessToken($process.Handle, ([pickPPId.pickPPId]::TOKEN_IMPERSONATE -BOR [pickPPId.pickPPId]::TOKEN_DUPLICATE), [ref]$hlsasstoken) 
+    $retVal = $pickPPId::OpenProcessToken($process.Handle, ($pickPPId::TOKEN_IMPERSONATE -BOR $pickPPId::TOKEN_DUPLICATE), [ref]$hlsasstoken) 
 
     [IntPtr]$dulicateTokenHandle = [IntPtr]::Zero 
     $retVal = $pickPPId::DuplicateToken($hlsasstoken, 2, [ref]$dulicateTokenHandle) 
@@ -206,5 +207,10 @@ $signature = @"
     $retval = $pickPPId::SetThreadToken([IntPtr]::Zero, $dulicateTokenHandle) 
     if(-not($retVal)) { 
         [System.Runtime.InteropServices.marshal]::GetLastWin32Error() 
-    } 
-}
+    }
+    # Above bits are for reference, not part of Invoke-CommandWithParent.ps1
+
+    $sie = New-Object STARTUPINFOEX
+    $pi = New-Object PROCESS_INFORMATION
+
+} # End Function
