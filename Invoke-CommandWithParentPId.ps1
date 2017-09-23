@@ -211,6 +211,17 @@ $signature = @"
     # Above bits are for reference, not part of Invoke-CommandWithParent.ps1
 
     $sie = New-Object STARTUPINFOEX
-    $pi = New-Object PROCESS_INFORMATION
+    $pi  = New-Object PROCESS_INFORMATION
+    $cbAttributeListSize = 0
+    $pAttributeList = $null
+    $hParentProcess = $null
+    [int]$dwPid = 0
+
+    if ( $args.count -lt 3 ) {
+        'usage: Invoke-CommandWithParentPid.ps1 command pid'
+    } else {
+        $dwPid = $pid
+    }
+
 
 } # End Function
