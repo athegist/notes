@@ -242,7 +242,7 @@ $signature = @"
             return 0
         }
         $pickPPId::InitializeProcThreadAttributeList($null, 1, 0, $cbAttributeListSize)
-        $pAttributeList = $pickPPId::HeapAlloc(GetProcessHeaps(), 0, $cbAttributeListSize)
+        $pAttributeList = $pickPPId::HeapAlloc($pickPPId::GetProcessHeap(), 0, $cbAttributeListSize)
         if ($null -eq $pAttributeList) {
             ('Error allocating process heap.')
             return 0
