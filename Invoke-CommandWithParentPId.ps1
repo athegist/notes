@@ -171,6 +171,22 @@ $signature = @"
             SW_FORCEMINIMIZE = 11,
             SW_MAX = 11
         }
+
+        [DllImport("kernel32.dll", SetLastError=true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool InitializeProcThreadAttributeList(
+             IntPtr lpAttributeList,
+             int dwAttributeCount,
+             int dwFlags,
+             ref IntPtr lpSize);
+
+        [DllImport("kernel32.dll", SetLastError=false)]
+        static extern IntPtr HeapAlloc(IntPtr hHeap, uint dwFlags, UIntPtr dwBytes);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern UInt32 GetProcessHeaps(
+            UInt32 NumberOfHeaps,
+            IntPtr[] ProcessHeaps);
 "@        
 
 
@@ -221,6 +237,16 @@ $signature = @"
         'usage: Invoke-CommandWithParentPid.ps1 command pid'
     } else {
         $dwPid = $pid
+        if ( 0 -eq $dwPid -or ( $dwPid % 4 -ne 0 )) {
+            ( '{0} is not a valid process id.' -f $dwPid )
+            return 0
+        }
+        $pickPPId::InitializeProcThreadAttributeList($null, 1, 0, $cbAttributeListSize)
+        $pAttributeList = $pickPPId::HeapAlloc(GetProcessHeaps(), 0, $cbAttributeListSize)
+        if ($null -eq $pAttributeList) {
+            ('Error allocating process heap.')
+            return 0
+        }
     }
 
 
