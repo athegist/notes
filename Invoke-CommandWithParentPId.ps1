@@ -29,7 +29,7 @@ function Invoke-CommandWithParentPId {
 
 # Protions of signature below from Niklas Goude via
 # https://blogs.technet.microsoft.com/heyscriptingguy/2012/07/05/use-powershell-to-duplicate-process-tokens-via-pinvoke/
-Add-Type -TypeDefinition @"
+$EVD = @"
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
